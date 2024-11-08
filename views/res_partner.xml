@@ -1,0 +1,27 @@
+<odoo>
+  <record id="view_partner_form_inherit" model="ir.ui.view">
+    <field name="name">res.partner.form.inherit</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='category_id']" position="after">
+        <field name="property_ids" widget='many2many_tags' options="{'color_field': 'color'}" />
+      </xpath>
+
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button name="action_view_properties"
+                type="object"
+                string="View Properties"
+                class="oe_stat_button"
+                icon="fa-building">
+          <field name="property_count" string="properties" widget="statinfo" />
+        </button>
+      </xpath>
+
+      <!--      <xpath expr="//field[@name='vat']" position="after">-->
+      <!--        <field name="is_partner_property" />-->
+      <!--      </xpath>-->
+
+    </field>
+  </record>
+</odoo>

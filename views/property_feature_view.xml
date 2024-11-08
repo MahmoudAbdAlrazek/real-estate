@@ -1,0 +1,39 @@
+<odoo>
+  <!-- Form View for Property Feature -->
+  <record id="view_property_feature_form" model="ir.ui.view">
+    <field name="name">property.feature.form</field>
+    <field name="model">property.feature</field>
+    <field name="arch" type="xml">
+      <form string="Property Feature">
+        <sheet>
+          <group>
+            <field name="name" />
+            <field name="description" />
+            <field name="active" />
+            <field name="color" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Tree View for Property Feature -->
+  <record id="view_property_feature_tree" model="ir.ui.view">
+    <field name="name">property.feature.tree</field>
+    <field name="model">property.feature</field>
+    <field name="arch" type="xml">
+      <tree string="Property Features" decoration-bf="color">
+        <field name="name" />
+        <field name="active" />
+        <field name="color" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_property_feature" model="ir.actions.act_window">
+    <field name="name">Property Features</field>
+    <field name="res_model">property.feature</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+</odoo>

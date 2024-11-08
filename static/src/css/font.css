@@ -1,0 +1,21 @@
+@font-face {
+font-family: 'BaskervvilleSC';
+src: url('/real_estate/static/src/fonts/BaskervvilleSC-Regular.ttf'), ;
+}
+
+@font-face {
+font-family: 'NerkoOne';
+src: url('/real_estate/static/src/fonts/NerkoOne-Regular.ttf'), ;
+}
+@font-face {
+font-family: 'ArchivoBlack';
+src: url('/real_estate/static/src/fonts/ArchivoBlack-Regular.ttf'), ;
+}
+/* تغيير الخط الافتراضي لجميع النصوص في Odoo */
+/*body {*/
+/*    font-family: 'BaskervvilleSC', 'sans-serif';*/
+/*    font-weight: bold;*/
+/*    font-style: normal;*/
+
+
+/*}*/

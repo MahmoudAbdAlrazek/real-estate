@@ -1,0 +1,29 @@
+<odoo>
+  <!-- مزايا العقار -->
+  <record id="feature_garage" model="property.feature">
+    <field name="name">Garage</field>
+    <field name="description">Available parking space for cars</field>
+    <field name="color">5</field>
+  </record>
+
+  <record id="feature_garden" model="property.feature">
+    <field name="name">Garden</field>
+    <field name="description">Green area for relaxation</field>
+    <field name="color">0</field>
+
+  </record>
+
+  <record id="feature_swimming_pool" model="property.feature">
+    <field name="name">Swimming Pool</field>
+    <field name="description">Private swimming pool</field>
+    <field name="color">2</field>
+
+  </record>
+
+  <record id="feature_sea_view" model="property.feature">
+    <field name="name">Sea View</field>
+    <field name="description">Property with a view of the sea</field>
+    <field name="color">4</field>
+
+  </record>
+</odoo>

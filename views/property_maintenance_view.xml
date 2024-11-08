@@ -1,0 +1,106 @@
+<odoo>
+  <!-- نموذج طلب الصيانة -->
+  <record id="view_property_maintenance_form" model="ir.ui.view">
+    <field name="name">property.maintenance.form</field>
+    <field name="model">property.maintenance</field>
+    <field name="arch" type="xml">
+      <form string="Maintenance Request">
+        <sheet>
+          <div class="oe_button_box" name="button_box" />
+
+
+          <!-- Ribbon for Pending State -->
+          <widget name="web_ribbon" title="pending" bg_color="bg-info-custom"
+                  invisible="state != 'pending'" />
+
+          <widget name="web_ribbon" title="in progress" bg_color="bg-warning-custom"
+                  invisible="state != 'in_progress'" />
+
+          <!-- Ribbon for Sold State -->
+          <widget name="web_ribbon" title="completed" bg_color="bg-success"
+                  invisible="state != 'completed'" />
+
+          <!-- Ribbon for Closed State -->
+          <widget name="web_ribbon" title="cancelled" bg_color="bg-danger"
+                  invisible="state != 'cancelled'" />
+
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                  invisible="active" />
+          <header>
+            <!-- زر "Pending" يظهر فقط إذا كانت الحالة "In Progress" -->
+            <button name="action_pending" string="Pending" type="object"
+                    invisible="state != 'in_progress'"
+                    class="oe_highlight" />
+            <!-- زر "Progress" يظهر فقط إذا كانت الحالة "pending" -->
+            <button name="action_in_progress" string="Progress" type="object"
+                    invisible="state != 'pending'"
+                    class="oe_highlight" />
+            <!-- زر "Completed" يظهر فقط إذا كانت الحالة "Pending,in_progress" -->
+            <button name="action_completed" string="Completed" type="object"
+                    invisible="state not in ('pending','in_progress')"
+                    class="oe_highlight" />
+            <!-- زر "Cancelled" يظهر فقط إذا كانت الحالة "In Progress" -->
+            <button name="action_cancelled" string="Cancelled" type="object"
+                    invisible="state != 'in_progress'"
+                    class="oe_highlight" />
+
+            <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,completed,cancelled" />
+          </header>
+          <group class="mt-4">
+            <field name="state" invisible="1" />  <!-- إضافة حقل الحالة -->
+            <field name="property_id"
+                   readonly="state in ('completed','cancelled')"
+            />
+            <field name="maintenance_date" readonly="state in ('completed','cancelled')" />
+            <field name="maintenance_type" widget="radio" options="{'horizontal': True}"
+                   readonly="state in ('completed','cancelled')" />
+            <field name="notes" readonly="state in ('completed','cancelled')" />
+            <field name="active" readonly="state in ('completed','cancelled')" />
+          </group>
+          <notebook>
+            <page string="Attachments">
+              <field name="attachment_ids" readonly="state in ('completed','cancelled')">
+                <tree>
+                  <field name="name" />
+                  <field name="file_size" />
+                </tree>
+                <!--                <form>-->
+                <!--                  <field name="name" />-->
+                <!--                  <field name="datas" filename="name" />-->
+                <!--                </form>-->
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" />
+          <field name="activity_ids" widget="mail_activity" />
+          <field name="message_ids" widget="mail_thread" />
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <!-- عرض قائمة طلبات الصيانة -->
+  <record id="view_property_maintenance_tree" model="ir.ui.view">
+    <field name="name">property.maintenance.tree</field>
+    <field name="model">property.maintenance</field>
+    <field name="arch" type="xml">
+      <tree string="Maintenance Requests">
+        <field name="property_id" />
+        <field name="maintenance_date" />
+        <field name="maintenance_type" />
+        <field name="state" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- إجراء القوائم (Action) لطلب الصيانة -->
+  <record id="action_property_maintenance" model="ir.actions.act_window">
+    <field name="name">Maintenance Requests</field>
+    <field name="res_model">property.maintenance</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+
+</odoo>

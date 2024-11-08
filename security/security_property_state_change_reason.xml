@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- صلاحيات الوصول Admin لنموذج PropertyStateChangeReason -->
+  <record id="access_property_state_change_reason_admin" model="ir.model.access">
+    <field name="name">Property State Change Reason Admin Access</field>
+    <field name="model_id" ref="model_property_state_change_reason" />
+    <field name="group_id" ref="real_estate.group_property_item_admin" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+
+  <!-- صلاحيات الوصول User لنموذج PropertyStateChangeReason -->
+  <record id="access_property_state_change_reason_user" model="ir.model.access">
+    <field name="name">Property State Change Reason User Access</field>
+    <field name="model_id" ref="model_property_state_change_reason" />
+    <field name="group_id" ref="real_estate.group_property_item_user" />
+    <field name="perm_read" eval="0" />
+    <field name="perm_write" eval="0" />
+    <field name="perm_create" eval="0" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+  <!-- قاعدة السجلات Admin لنموذج PropertyStateChangeReason -->
+  <record id="rule_property_state_change_reason_admin" model="ir.rule">
+    <field name="name">Property State Change Reason: Admin Access</field>
+    <field name="model_id" ref="model_property_state_change_reason" />
+    <field name="domain_force">[]</field> <!-- يسمح للوصول إلى كل السجلات -->
+    <field name="groups" eval="[(4, ref('real_estate.group_property_item_admin'))]" />
+  </record>
+
+  <!-- قاعدة السجلات User لرؤية السجلات التي أنشأها المستخدم فقط -->
+  <record id="rule_property_state_change_reason_user" model="ir.rule">
+    <field name="name">Property State Change Reason: User Owns Record</field>
+    <field name="model_id" ref="model_property_state_change_reason" />
+    <field name="domain_force">[('create_uid', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('real_estate.group_property_item_user'))]" />
+  </record>
+
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!--  هذا الجزء من الكود ينشئ فئة جديدة لوحدة (Module) في Odoo تُسمى "Real Estate" (العقارات).
+  ir.module.category:-  هو النموذج (model) في Odoo الذي يُستخدم لتعريف الفئات.
+  name :- هو اسم الفئة الجديدة، وهنا اسمها "Real Estate".
+الفئات تُستخدم لتصنيف الوحدات في Odoo مما يسهل تنظيمها.-->
+  <record id="property_items_category" model="ir.module.category">
+    <field name="name">Real Estate</field>
+    <field name="sequence">3</field>
+  </record>
+
+
+  <!-- إنشاء مجموعة Admin -->
+  <record id="group_property_item_admin" model="res.groups">
+    <field name="name">Property Item Admin</field>
+    <field name="category_id" ref="property_items_category" />
+    <field name="implied_ids" eval="[(4, ref('real_estate.group_property_item_user'))]" />
+    <field name="comment">this group has access to all property items</field>
+  </record>
+
+  <!-- إنشاء مجموعة User -->
+  <record id="group_property_item_user" model="res.groups">
+    <field name="name">Property Item User</field>
+    <field name="category_id" ref="property_items_category" />
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+    <field name="comment">this group has access to some property items</field>
+  </record>
+
+  <!-- صلاحيات الوصول Admin لنموذج PropertyItem -->
+  <record id="access_property_item_admin" model="ir.model.access">
+    <field name="name">Property Item Admin Access</field>
+    <field name="model_id" ref="model_property_items" />
+    <field name="group_id" ref="group_property_item_admin" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+
+  <!-- صلاحيات الوصول للمستخدم العادي  User لنموذج PropertyItem  -->
+  <record id="access_property_item_user" model="ir.model.access">
+    <field name="name">Property Item User Access</field>
+    <field name="model_id" ref="model_property_items" />
+    <field name="group_id" ref="group_property_item_user" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+  <!-- قواعد الوصول للمدير -->
+  <record id="rule_property_item_admin" model="ir.rule">
+    <field name="name">Property Item: Admin Access</field>
+    <field name="model_id" ref="real_estate.model_property_items" />
+    <field name="domain_force">[]</field> <!-- يسمح للوصول إلى كل السجلات -->
+    <field name="groups" eval="[(4, ref('real_estate.group_property_item_admin'))]" />
+  </record>
+
+  <!--قواعد التسجيل (Record Rules)
+  لمنع المستخدمين من رؤية السجلات التي لا تخصهم-->
+  <record id="rule_property_item_user" model="ir.rule">
+    <field name="name">Property Item: User Owns Record</field>
+    <field name="model_id" ref="real_estate.model_property_items" />
+    <field name="domain_force">[('create_uid', '=', user.id)]</field> <!-- يسمح للوصول للسجلات التي لا تخصهم -->
+    <field name="groups" eval="[(4, ref('real_estate.group_property_item_user'))]" />
+  </record>
+
+</odoo>

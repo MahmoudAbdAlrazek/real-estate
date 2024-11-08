@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_item_admin,Property Item Admin,real_estate.model_property_items,real_estate.group_property_item_admin,1,1,1,1
+access_property_item_user,Property Item User,real_estate.model_property_items,real_estate.group_property_item_user,1,1,1,0
+access_property_feature,Property Features,model_property_feature,base.group_user,1,1,1,1
+acecess_property_maintenance,Property Maintenance,model_property_maintenance,base.group_user,1,1,1,1
+acecess_property_deal,Property Deals,model_property_deal,base.group_user,1,1,1,1
+access_change_state_wizard,Change State Wizard,model_change_state_wizard,base.group_user,1,1,1,1
+access_property_state_change_reason,Change Reason Wizard State,model_property_state_change_reason,real_estate.group_property_item_admin,1,1,1,1

@@ -1,0 +1,49 @@
+/*دول ممكن اضيفهم هنا وممكن لا طول ما عامل ملف وضايف فيخ خطوط اسمه font.css*/
+/*@font-face {*/
+/*font-family: 'NerkoOne';*/
+/*src: url('/app_real/static/src/fonts/BaskervvilleSC-Regular.ttf') ,*/
+/*url('/app_real/static/src/fonts/NerkoOne-Regular.ttf') ;*/
+/*font-weight: bold;*/
+/*font-style: normal;*/
+/*}*/
+
+/* تغيير الخط الافتراضي لفورم  property.item في Odoo    */
+/*.font-ArchivoBlack {*/
+/*    font-family: 'ArchivoBlack', 'sans-serif';*/
+/*    font-size: 15px;*/
+/*}*/
+
+.bg-warning-custom {
+    background-color: #FFA62F; /* الأخضر */
+    color: #ffffff; /* النص الأبيض */
+}
+.bg-info-custom {
+    background-color: #5AB2FF; /* الأخضر */
+    color: #ffffff; /* النص الأبيض */
+}
+.bg-rented {
+    background-color: #82fdbe; /* الأخضر */
+    color: #ffffff; /* النص الأبيض */
+}
+
+.custom-tree-view {
+    table-layout: auto; /* يسمح بتحديد عرض الأعمدة تلقائيًا */
+    width: 100%; /* اجعل الجدول بعرض كامل */
+}
+
+.custom-tree-view thead  {
+    text-align: center; /* محاذاة النص إلى اليسار */
+    width:fit-content
+}
+
+
+.custom-tree-view th.div {
+    white-space: nowrap; /* منع التفاف النص */
+    text-overflow: ellipsis; /* عرض ثلاث نقاط (...) عند التفاف النص */
+    text-align: center; /* محاذاة النص إلى اليسار */
+    text-overflow: ellipsis; /* عرض ثلاث نقاط (...) عند التفاف النص */
+}
+.custom-tree-view td{
+    text-align: center; /* محاذاة النص إلى اليسار */
+    width:fit-content;
+}

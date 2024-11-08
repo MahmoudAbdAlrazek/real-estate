@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <report
+      id="action_report_property_deal"
+      string="Property Deal Report"
+      model="property.deal"
+      report_type="qweb-html"
+      name="real_estate.report_property_deal"
+      file="real_estate.report_property_deal"
+      print_report_name="'Property_Deal_Report_' + object.property_id.name"
+  />
+
+  <template id="report_property_deal">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <div class="page" style="font-family: 'NerkoOne';">
+          <!-- إضافة شعار الشركة -->
+          <div class="header text-center">
+            <h2 class="text-center mb-3" style="color: #fa7a7a;">Property Details Report</h2>
+            <p>Monthly Report -
+              <t t-esc="(datetime.datetime.now() + datetime.timedelta(hours=3)).strftime('%Y-%m-%d')" />
+            </p>
+            <hr style="border-top: 2px solid #2e1212;" />
+          </div>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered table-hover table-responsive">
+              <thead style="font-family: 'NerkoOne'; font-size: 15px; font-weight: bold; text-align: center;
+                                          text-align-last: center; vertical-align: middle;width: 100%;
+                                          color:#732626;">
+                <tr>
+                  <th>Property Name</th>
+                  <th>Sale Price</th>
+                  <th>Rent Price</th>
+                  <th>Country</th>
+                  <th>State</th>
+                  <th>Property Type</th>
+                  <th>Size (m²)</th>
+                  <th>Deal State</th>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Loop to iterate over the data -->
+                <t t-foreach="docs" t-as="deal">
+                  <tr>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.property_id.name" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.sale_price" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.rent_price" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.country_id.name" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.state_id.name" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.property_type" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.size" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.state" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.partner_id.name" />
+                    </td>
+                    <td style="text-align: center;vertical-align: middle;">
+                      <t t-esc="deal.phone" />
+                    </td>
+                  </tr>
+                </t>
+              </tbody>
+
+            </table>
+
+            <!-- Add a separator between the table and the next content -->
+            <div style="margin-top: 20px;">
+              <p style="font-size: 14px; text-align: center;">Thank you for choosing our services. For more information,
+                please contact us.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </t>
+    </t>
+
+    <!-- Adding CSS styles for responsiveness -->
+    <style type='text/css'>
+      .table-responsive {
+      overflow-x: auto;
+      }
+      @media (max-width: 768px) {
+      .table th, .table td {
+      font-size: 12px; /* Font size on small screens */
+      }
+      }
+    </style>
+
+  </template>
+
+
+</odoo>
+

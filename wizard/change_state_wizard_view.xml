@@ -1,0 +1,23 @@
+<odoo>
+  <!--  خطوه تانيه لعرض ويزرد في فورم-->
+
+  <record id="view_change_state_wizard" model="ir.ui.view">
+    <field name="name">change.state.wizard.form</field>
+    <field name="model">change.state.wizard</field>
+    <field name="arch" type="xml">
+      <form string="change state property">
+        <group>
+          <field name="new_state" />
+          <field name="reason" />
+        </group>
+
+        <footer>
+          <button string="change state property" type="object" name="change_state"
+                  class="btn-primary" />
+          <button string="close" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>

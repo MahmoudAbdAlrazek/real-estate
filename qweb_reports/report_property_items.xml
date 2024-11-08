@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_report_property_items" model="ir.actions.report">
+    <field name="name">Property Items Report</field>
+    <field name="model">property.items</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">real_estate.report_property_items</field>
+    <field name="print_report_name">'Property Items Report'</field>
+    <field name="report_file">real_estate.report_property_items</field>
+    <field name="binding_model_id" ref="model_property_items" />
+    <field name="binding_type">report</field>
+    <!--    <field name="groups_id" eval="[(4, ref('real_estate.group_property_item_user'))]" />-->
+  </record>
+
+
+  <template id="report_property_items">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <div class="page" style="font-family: 'sans';">
+          <!-- إضافة شعار الشركة -->
+          <div class="header text-center">
+            <h2 class="text-center mb-3" style="color: #732626;">Property Details Report</h2>
+            <p>Monthly Report -
+              <t t-esc="(datetime.datetime.now() + datetime.timedelta(hours=3)).strftime('%Y-%m-%d')" />
+            </p>
+            <hr style="border-top: 2px solid #732626;" />
+          </div>
+
+          <!-- تحسين عرض الجدول -->
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered table-hover" style="width: 100%;">
+              <thead style="background-color: #732626; color: white; font-size: 14px;">
+                <tr>
+                  <th>Property Name</th>
+                  <th>Location</th>
+                  <th>Country</th>
+                  <th>State</th>
+                  <th>City</th>
+                  <th>Rental Price</th>
+                  <th>Selling Price</th>
+                  <th>Expected Selling Date</th>
+                  <th>Property Type</th>
+                  <th>Size (m²)</th>
+                  <th>Number of Rooms</th>
+                  <th>Number of Bathrooms</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="docs" t-as="doc">
+                  <tr style="text-align: center;">
+                    <td>
+                      <t t-esc="doc.name" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.location" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.country_id.name" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.state_id.name" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.city" />
+                    </td>
+                    <td>
+                      <span style="color: green;">
+                        <t t-esc="doc.rental_price" />
+                      </span>
+                    </td>
+                    <td>
+                      <t t-if="user.has_group('real_estate.group_property_item_admin')">
+                        <span style="color: blue;">
+                          <t t-esc="doc.selling_price" />
+                        </span>
+                      </t>
+                      <t t-else="">
+                        <span>Access Denied</span> <!-- أو أي نص بديل تريده -->
+                      </t>
+                    </td>
+
+                    <td>
+                      <t t-esc="doc.expected_selling_date" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.property_type" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.size" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.number_of_rooms" />
+                    </td>
+                    <td>
+                      <t t-esc="doc.number_of_bathrooms" />
+                    </td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </t>
+    </t>
+
+    <!-- تحسين استجابة التقرير للهواتف المحمولة -->
+    <style type='text/css'>
+      .table-responsive {
+      overflow-x: auto;
+      }
+      .table thead {
+      background-color: #732626;
+      color: #fff;
+      }
+      .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 8px;
+      }
+      .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f2f2f2;
+      }
+      @media (max-width: 768px) {
+      .table th, .table td {
+      font-size: 12px;
+      padding: 6px;
+      }
+      .header h2 {
+      font-size: 18px;
+      }
+      }
+    </style>
+  </template>
+
+
+</odoo>

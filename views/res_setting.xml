@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="property_items_config_settings_view" model="ir.ui.view">
+      <field name="name">property.items.config.settings.view</field>
+      <field name="model">res.config.settings</field>
+      <field name="inherit_id" ref="base.res_config_settings_view_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//form" position="inside">
+          <app data-string="Real Estate" string="Real Estate" name="real estate">
+            <setting>
+              <group string="Property Items Advanced Settings">
+                <field name="property_type_filter" widget="radio" options="{'horizontal': True}" />
+                <field name="reminder_days" />
+              </group>
+            </setting>
+          </app>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="action_property_items_config_settings" model="ir.actions.act_window">
+      <field name="name">Property Items Settings</field>
+      <field name="res_model">res.config.settings</field>
+      <field name="view_mode">form</field>
+      <field name="context">{'default_model': 'property.items'}</field>
+    </record>
+
+    <menuitem id="menu_property_items_config_settings"
+              name="Settings"
+              parent="real_estate.property_items_root_menu"
+              action="action_property_items_config_settings"
+              sequence="10"
+              groups="base.group_system" />
+  </data>
+</odoo>
