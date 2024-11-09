@@ -5,17 +5,25 @@
             sequence="2"
             web_icon="real_estate,static/description/real.png" />
 
+  <!--  property_items_parent.xml -->
   <menuitem id="property_items_parent"
             name="Property Items"
             parent="real_estate.property_items_root_menu"
             sequence="1"
   />
+  <!--  property_items_menu.xml -->
   <menuitem id="property_items_menu"
             name="Property Items"
             action="real_estate.property_items_action"
             parent="real_estate.property_items_parent"
             sequence="1"
   />
+  <!-- luxury_property_menu.xml -->
+
+  <menuitem id="menu_luxury_property"
+            name="Luxury Properties"
+            parent="real_estate.property_items_parent"
+            action="real_estate.action_luxury_property" />
 
   <!--partner menu  -->
   <menuitem id="menu_partner_list"

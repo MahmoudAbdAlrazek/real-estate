@@ -41,6 +41,7 @@
                 # تأتي بعد ملفات البيانات والتقارير. .
                 # هذه الملفات تحدد كيفية عرض البيانات في الواجهات المختلفة
                 'views/property_items_view.xml',
+                'views/luxury_property_views.xml',
 
                 'views/partner_menu.xml',
 

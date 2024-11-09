@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- luxury_property_views.xml -->
+<odoo>
+  <!-- عرض الشجرة لعرض قائمة بالعقارات الفاخرة -->
+  <record id="view_luxury_property_tree" model="ir.ui.view">
+    <field name="name">luxury.property.tree</field>
+    <field name="model">luxury.property</field>
+    <field name="arch" type="xml">
+      <tree string="Luxury Properties">
+        <field name="property_id" />
+        <field name="name" />
+        <field name="location" />
+        <field name="selling_price" />
+        <field name="is_vip" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- عرض الفورم لتفاصيل كل عقار فخم -->
+  <record id="view_luxury_property_form" model="ir.ui.view">
+    <field name="name">luxury.property.form</field>
+    <field name="model">luxury.property</field>
+    <field name="arch" type="xml">
+      <form string="Luxury Property">
+        <sheet>
+          <group>
+
+            <group string="Property Info">
+              <field name="name" />
+              <field name="address" />
+              <field name="city" />
+              <field name="state_id" />
+              <field name="location" />
+              <field name="country_id" />
+              <field name="selling_price" />
+              <field name="expected_selling_date" />
+              <field name="rental_price" />
+            </group>
+
+            <group string="Luxury Features">
+              <field name="currency_id" />
+              <field name="expected_selling_date" />
+              <field name="rental_price" />
+              <field name="luxury_features" />
+              <field name="is_vip" />
+            </group>
+
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- luxury_property_actions.xml -->
+  <odoo>
+    <record id="action_luxury_property" model="ir.actions.act_window">
+      <field name="name">Luxury Properties</field>
+      <field name="res_model">luxury.property</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="view_luxury_property_tree" />
+    </record>
+  </odoo>
+
+</odoo>
