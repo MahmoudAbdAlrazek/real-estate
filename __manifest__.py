@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 {
         'name'       : "Real_Estate_Management_17",
 
@@ -29,6 +31,7 @@
                 'security/security_property_items.xml',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات. ن طريق group
                 'security/security_property_state_change_reason.xml',
                 'security/ir.model.access.csv',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات.
+
                 # إذا كان لديك ملفات تحتوي على بيانات ثابتة أو مرجعية مثل ملفات XML أو CSV
                 # التي تحدد بيانات أولية، أضفها بعد ملفات الأمان:
 
@@ -87,4 +90,3 @@
                 'demo/demo.xml',
         ],
 }
-# -*- coding: utf-8 -*-

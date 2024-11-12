@@ -23,14 +23,15 @@
   <menuitem id="menu_luxury_property"
             name="Luxury Properties"
             parent="real_estate.property_items_parent"
-            action="real_estate.action_luxury_property" />
+            action="real_estate.action_luxury_property"
+            sequence="2" />
 
   <!--partner menu  -->
   <menuitem id="menu_partner_list"
             name="All Partners"
             action="real_estate.action_partner_list"
             parent="real_estate.property_items_parent"
-            sequence="2" />
+            sequence="3" />
 
   <menuitem id="menu_property_features"
             name="Property Features"

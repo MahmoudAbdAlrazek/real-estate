@@ -3,7 +3,7 @@
   <record id="action_report_property_items" model="ir.actions.report">
     <field name="name">Property Items Report</field>
     <field name="model">property.items</field>
-    <field name="report_type">qweb-html</field>
+    <field name="report_type">qweb-pdf</field>
     <field name="report_name">real_estate.report_property_items</field>
     <field name="print_report_name">'Property Items Report'</field>
     <field name="report_file">real_estate.report_property_items</field>
