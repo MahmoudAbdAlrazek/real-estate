@@ -1,6 +1,7 @@
 import random
 from datetime import date
 from email.policy import default
+from datetime import datetime
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, AccessError, UserError
@@ -19,20 +20,21 @@ class PropertyItems(models.Model):
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']  # الوحدة تتيح التنبيهات والتنشيطات للمستخدمين على السجلات
 
-    reference_number = fields.Char(string='Reference Number', readonly=True, copy=False, default='new')
+    reference_number = fields.Char(string='Reference Number', readonly=True, copy=False, default='new')  # copy=False يمنع النسخ التلقائي
+    suffix = fields.Char(string='Suffix', readonly=True, copy=False)
     # reference_number = fields.Char(string='Reference Number', readonly=True, copy=False, default=lambda self: self.env['ir.sequence'].next_by_code('property.items'))
 
-    res_partner_id = fields.Many2one(
+    partner_id = fields.Many2one(
             'res.partner',
             string='Partner Owner',
             tracking=True, )
 
-    customer_email = fields.Char(related='res_partner_id.email', string='Email')
+    customer_email = fields.Char(related='partner_id.email', string='Email')
 
     color = fields.Integer(string='Color', default=lambda self: random.randint(0, 11))
 
     # البيانات الأساسية
-    name = fields.Char(string='Property Name', required=True, tracking=True, )
+    name = fields.Char(string='Property Name', tracking=True, )
     description = fields.Text(string='Description')
     active = fields.Boolean(string='Archive', default=True)
 
@@ -40,22 +42,22 @@ class PropertyItems(models.Model):
     write_date = fields.Datetime(string='Last Updated', readonly=True, default=fields.Datetime.now)
 
     # بيانات الموقع
-    location = fields.Char(string='Location', tracking=True, required=True)
-    address = fields.Char(string='Address', tracking=True, required=True)
+    location = fields.Char(string='Location', tracking=True)
+    address = fields.Char(string='Address', tracking=True)
     latitude = fields.Float(string='Latitude')
     longitude = fields.Float(string='Longitude')
-    city = fields.Char(string='City', required=True)
-    state_id = fields.Many2one('res.country.state', string='State', required=True)
+    city = fields.Char(string='City', )
+    state_id = fields.Many2one('res.country.state', string='Country State', )
     # النموذج res.country يأتي ضمن الوحدة (module) الأساسية في Odoo، التي تُسمى base.
     #  يخزن معلومات عن الدول. يمكن أن يحتوي على حقول مثل اسم الدولة، رمز الدولة، ورمز الهاتف.
-    country_id = fields.Many2one('res.country', string='Country', required=True)
+    country_id = fields.Many2one('res.country', string='Country', )
 
     # البيانات المالية
-    selling_price = fields.Float(tracking=True, required=True)
+    selling_price = fields.Float(tracking=True, )
     # selling_price = fields.Float(tracking=True, required=True, groups='real_estate.group_property_item_admin')
     # تاريخ البيع المتوقع
-    expected_selling_date = fields.Date(string="Expected Selling Date", required=True)
-    rental_price = fields.Float(string='Rental Price', tracking=True, required=True)  # سعر ألإيجار
+    expected_selling_date = fields.Date(string="Expected Selling Date", )
+    rental_price = fields.Float(string='Rental Price', tracking=True, )  # سعر ألإيجار
     # النموذج res.currency يأتي افتراضيًا مع  Odoo كجزء من الوحدة الأساسية base
     currency_id = fields.Many2one('res.currency', string='Currency')
 
@@ -133,7 +135,7 @@ class PropertyItems(models.Model):
         for row, property in enumerate(properties, start=2):
             worksheet.write(row, 0, property.reference_number, cell_format)
             worksheet.write(row, 1, property.name, cell_format)
-            worksheet.write(row, 2, property.res_partner_id.name if property.res_partner_id else "", cell_format)
+            worksheet.write(row, 2, property.partner_id.name if property.partner_id else "", cell_format)
             worksheet.write(row, 3, property.state_id.name if property.state_id else "", cell_format)
             worksheet.write(row, 4, property.country_id.name if property.country_id else "", cell_format)
             worksheet.write(row, 5, property.selling_price, cell_format)
@@ -254,11 +256,25 @@ class PropertyItems(models.Model):
                 'target': 'self',  # فتح الرابط في نفس النافذة
         }
 
-    @api.model
-    def create(self, vals):
-        if vals.get('reference_number', _('new')) == _('new'):
-            vals['reference_number'] = self.env['ir.sequence'].next_by_code('prop_sequence') or _('new')
-        return super(PropertyItems, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        # التعامل مع قائمة القيم
+        for vals in vals_list:
+            # إذا كانت 'reference_number' في القيم هي 'new', قم بإنشاء رقم مرجعي جديد
+            if vals.get('reference_number', _('new')) == _('new'):
+                vals['reference_number'] = self.env['ir.sequence'].next_by_code('prop_sequence') or _('new')
+
+        # بعد تحديث القيم، قم بإنشاء السجلات
+        return super(PropertyItems, self).create(vals_list)
+
+    def copy(self, default=None):
+        """
+        يتم استدعاء هذه الدالة عند استخدام زر "تكرار" لتغيير الرقم المرجعي إلى رقم جديد
+        """
+        default = dict(default or {})
+        # توليد رقم مرجعي جديد عند التكرار باستخدام التسلسل
+        default['reference_number'] = self.env['ir.sequence'].next_by_code('prop_sequence') or _('new')
+        return super(PropertyItems, self).copy(default)
 
     def action_set_available(self):
         self.state = 'available'

@@ -11,7 +11,7 @@ class PropertyDeal(models.Model):
 
     deal_id = fields.Char(string='Deal ID', required=True, unique=True)
     property_id = fields.Many2one('property.items', string='Property', required=True, ondelete='cascade')
-    partner_id = fields.Many2one('res.partner', readonly=True, string='Customer', related='property_id.res_partner_id')
+    partner_id = fields.Many2one('res.partner', readonly=True, string='Customer', related='property_id.partner_id')
     date = fields.Date(string='Deal Date', required=True, tracking=True, default=fields.Date.today)
     active = fields.Boolean(string="Archive", default=True, )
 

@@ -6,10 +6,10 @@ class ResPartner(models.Model):
 
     property_ids = fields.One2many(
             'property.items',
-            'res_partner_id',
+            'partner_id',
             tracking=True,
             string='Property',
-            domain="[('res_partner_id', '=', False)]",  # يعرض فقط العقارات غير المرتبطة بعملاء آخرين    )
+            domain="[('partner_id', '=', False)]",  # يعرض فقط العقارات غير المرتبطة بعملاء آخرين    )
 
     )
     property_count = fields.Integer(
@@ -41,7 +41,7 @@ class ResPartner(models.Model):
     # def action_view_properties(self):
     #     self.ensure_one()
     #     action = self.env.ref('real_estate.property_items_action').read()[0]
-    #     action['domain'] = [('res_partner_id', '=', self.id)]
+    #     action['domain'] = [('partner_id', '=', self.id)]
     #     return action
 
     def action_view_properties(self):
@@ -58,10 +58,10 @@ class ResPartner(models.Model):
                 'view_mode': 'tree,form',
                 'context'  : {
                         # دا لما اعمل عميل جديد واكون داخل من سمارت بتون بيجيب قيمه العميل الافتراضي للي داخل منه
-                        # res_partner_id : - دا اسم الحقل اللي موجود في العميل الافتراضي
-                        'default_res_partner_id': self.id,
+                        # partner_id : - دا اسم الحقل اللي موجود في العميل الافتراضي
+                        'default_partner_id': self.id,
                         # دي بتخلي العميل للقراءه فقط لما ادخل من سمارت بتون عندما انشا عميل جديد او ادخل علي العميل نفسه
-                        'partner_readonly'      : True,
+                        'partner_readonly'  : True,
 
                         # 'create'                  : False,
                         # 'edit'  : False,

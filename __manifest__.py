@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 {
         'name'       : "Real_Estate_Management_17",
 
@@ -21,16 +19,16 @@
         'version'    : '0.1',
 
         # any module necessary for this one to work correctly
-        'depends'    : ['base', 'mail', 'contacts', ],
+        'depends'    : ['base', 'mail', 'contacts', 'account'],
         # 'depends': ['base', 'contacts', 'mail', 'sale_management',
         #             'account_accountant', 'website'
         #             ],
 
         # always loaded
         'data'       : [
+                'security/ir.model.access.csv',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات.
                 'security/security_property_items.xml',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات. ن طريق group
                 'security/security_property_state_change_reason.xml',
-                'security/ir.model.access.csv',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات.
 
                 # إذا كان لديك ملفات تحتوي على بيانات ثابتة أو مرجعية مثل ملفات XML أو CSV
                 # التي تحدد بيانات أولية، أضفها بعد ملفات الأمان:
@@ -65,6 +63,7 @@
 
                 # ملفات الوراثة (Inherit Views) والملفات الإضافية:
                 # أضف أي ملفات وراثة (مثل res_partner_view_inherit.xml) أو أي ملفات إضافية في النهاية.
+
                 'views/res_partner.xml',
         ],
 
@@ -87,6 +86,7 @@
 
         # only loaded in demonstration mode
         'demo'       : [
-                'demo/demo.xml',
+                # 'demo/demo.xml',
         ],
 }
+# -*- coding: utf-8 -*-

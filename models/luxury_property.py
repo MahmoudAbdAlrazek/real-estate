@@ -9,6 +9,7 @@ class LuxuryProperty(models.Model):
     # واقدر اضيف اي حاجه محتاجاها منهم من غير ما اعيد كتابة الحقول  من الاول
 
     _name = 'luxury.property'
+    _description = 'Luxury Property'
     _inherits = {'property.items': 'property_id', }
 
     property_id = fields.Many2one(
