@@ -23,7 +23,7 @@
     <field name="model">property.state.change.reason</field>
     <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
     <field name="arch" type="xml">
-      <tree>
+      <tree editable="top" edit="1">
         <field name="property_id" />
         <field name="change_reason" />
         <field name="change_date" />

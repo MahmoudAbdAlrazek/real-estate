@@ -287,6 +287,13 @@ class PropertyItems(models.Model):
             if record.state != 'sold':
                 record.state = 'sold'
                 record.message_post(body="The deal has been marked as sold.")
+                return {
+                        'effect': {
+                                'fadeout': 'slow',
+                                'message': 'The deal has been marked as sold.',
+                                'type'   : 'rainbow_man',
+                        }
+                }
 
     def action_set_closed(self):
         for record in self:
@@ -388,8 +395,10 @@ class PropertyItems(models.Model):
         }
 
     def action_open_change_state_wizard(self):
-
+        if len(self) > 1:
+            raise UserError("You can only perform this action on one record at a time.")
         self.ensure_one()  # التأكد من أن الدالة تُستدعى على سجل واحد فقط
+
         # تحقق من أن الحالة الحالية تسمح بتغييرها
         # if self.state != 'closed' and self.state != 'sold':  # استخدمت _ لجعل رسالة الخطأ قابلة للترجمة، مما يعزز توافق الكود مع الأنظمة متعددة اللغات.
         if self.state != 'closed':  # استخدمت _ لجعل رسالة الخطأ قابلة للترجمة، مما يعزز توافق الكود مع الأنظمة متعددة اللغات.

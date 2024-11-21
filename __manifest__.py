@@ -26,9 +26,9 @@
 
         # always loaded
         'data'       : [
-                'security/ir.model.access.csv',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات.
                 'security/security_property_items.xml',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات. ن طريق group
                 'security/security_property_state_change_reason.xml',
+                'security/ir.model.access.csv',  # يجب أن يكون هذا الملف في القمة لأنه يحدد صلاحيات الوصول للموديلات.
 
                 # إذا كان لديك ملفات تحتوي على بيانات ثابتة أو مرجعية مثل ملفات XML أو CSV
                 # التي تحدد بيانات أولية، أضفها بعد ملفات الأمان:

@@ -117,9 +117,8 @@
               <!--              <field name="selling_price" placeholder="selling_price" widget="monetary"-->
               <!--                     attrs="{'invisible': [('selling_price_visible', '=', False)]}" />-->
 
-
               <field name="expected_selling_date" placeholder="Expected Selling Date" widget="date"
-                     readonly="state_readonly == 'True'" />
+                     readonly="state_readonly == 'True'" options="{'datepicker': {'daysOfWeekDisabled': [0, 6]}}" />
               />
               <!--              <field name="expected_selling_date" placeholder="Expected Selling Date" widget="date"-->
               <!--                     attrs="{'readonly': [('expected_selling_date', '!=', False)]}" />-->
@@ -222,7 +221,8 @@
     <field name="name">property.items.tree</field>
     <field name="model">property.items</field>
     <field name="arch" type="xml">
-      <tree class="custom-tree-view " string="Property " decoration-danger="(is_past)">
+      <tree class="custom-tree-view " string="Property " decoration-danger="(is_past)"
+            decoration-success="(state == 'sold')">
         <header>
           <button name="action_get_statistics" string="Action Get Statistics" type="object" class="oe_highlight" />
           <button name="export_property_items_xlsx" string="Export to Excel" type="object"

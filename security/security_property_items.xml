@@ -10,11 +10,12 @@
   </record>
   <!--ترتيب مهم بذات لو في مرجع زي الادمن بيخد من اليوزر ف لازم اعرف يوزر اول وبعد كدا ادمن-->
 
+
   <!-- إنشاء مجموعة User -->
   <record id="group_property_item_user" model="res.groups">
     <field name="name">Property Item User</field>
     <field name="category_id" ref="property_items_category" />
-    <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+    <!--    <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />-->
     <!--    <field name="comment">this group has access to some property items</field>-->
   </record>
 
@@ -24,8 +25,11 @@
     <field name="category_id" ref="property_items_category" />
     <field name="implied_ids"
            eval="[(4, ref('real_estate.group_property_item_user')), (4, ref('base.group_system'))]" />
+    <field name="users" eval="[(4, ref('base.user_admin'))]" />
     <!--    <field name="comment">this group has access to all property items</field>-->
   </record>
+
+
   <!-- صلاحيات الوصول Admin لنموذج PropertyItem -->
   <!--  <record id="access_property_item_admin" model="ir.model.access">-->
   <!--    <field name="name">Property Item Admin Access</field>-->

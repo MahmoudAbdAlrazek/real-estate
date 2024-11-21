@@ -43,4 +43,3 @@ class ChangeStateWizard(models.TransientModel):
 
         # تغيير الحالة إلى الحالة الجديدة
         property_item.state = self.new_state
-
