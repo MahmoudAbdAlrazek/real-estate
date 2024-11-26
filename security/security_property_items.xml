@@ -4,30 +4,43 @@
   ir.module.category:-  هو النموذج (model) في Odoo الذي يُستخدم لتعريف الفئات.
   name :- هو اسم الفئة الجديدة، وهنا اسمها "Real Estate".
 الفئات تُستخدم لتصنيف الوحدات في Odoo مما يسهل تنظيمها.-->
-  <record id="property_items_category" model="ir.module.category">
+  <record id="property_items_category_parent" model="ir.module.category">
     <field name="name">Real Estate</field>
     <!--    <field name="sequence">3</field>-->
   </record>
+
+  <record id="property_items_category_child" model="ir.module.category">
+    <field name="name">Real Estate</field>
+    <field name="parent_id" ref="real_estate.property_items_category_parent" />
+  </record>
+
   <!--ترتيب مهم بذات لو في مرجع زي الادمن بيخد من اليوزر ف لازم اعرف يوزر اول وبعد كدا ادمن-->
-
-
   <!-- إنشاء مجموعة User -->
   <record id="group_property_item_user" model="res.groups">
     <field name="name">Property Item User</field>
-    <field name="category_id" ref="property_items_category" />
-    <!--    <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />-->
+    <field name="category_id" ref="real_estate.property_items_category_child" />
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+    <field name="users" eval="[(4, ref('base.user_demo'))]" />
     <!--    <field name="comment">this group has access to some property items</field>-->
   </record>
 
   <!-- إنشاء مجموعة Admin -->
   <record id="group_property_item_admin" model="res.groups">
     <field name="name">Property Item Admin</field>
-    <field name="category_id" ref="property_items_category" />
+    <field name="category_id" ref="real_estate.property_items_category_child" />
+    <!--      تستخدم إذا كنت تريد إضافة قيمة جديدة فقط دون التأثير على القيم السابقة :- (4, id):.
+        مثال: إضافة مجموعة جديدة لمجموعة المستخدمين الموجودة بالفعل.-->
+    <!--        عندما يتم تعيين مستخدم إلى هذه المجموعة، فإنه سيحصل أيضًا على الصلاحيات المرتبطة
+     بكل من المجموعتين المذكورتين (وراثة الصلاحيات).-->
     <field name="implied_ids"
            eval="[(4, ref('real_estate.group_property_item_user')), (4, ref('base.group_system'))]" />
     <field name="users" eval="[(4, ref('base.user_admin'))]" />
     <!--    <field name="comment">this group has access to all property items</field>-->
   </record>
+  <!--تستخدم (6, 0, [ids]):
+      إذا كنت تريد تحديد القيم بدقة واستبدال كل القيم السابقة.
+      مثال: عند إعداد مجموعة جديدة وتريد أن تكون العلاقة واضحة ومحددة.-->
+  <!--<field name="implied_ids" eval="[(6, 0, [ref('real_estate.group_property_item_user')])]" />-->
 
 
   <!-- صلاحيات الوصول Admin لنموذج PropertyItem -->
@@ -53,30 +66,6 @@
   <!--  </record>-->
 
 
-  <!--  <record id="property_items_category" model="ir.module.category">-->
-  <!--    <field name="name">Real Estate</field>-->
-  <!--  </record>-->
-
-  <!--  <record id="group_property_item_user" model="res.groups">-->
-  <!--    <field name="name">Property Item User</field>-->
-  <!--    <field name="category_id" ref="property_items_category" />-->
-  <!--  </record>-->
-
-  <!--  <record id="group_property_item_admin" model="res.groups">-->
-  <!--    <field name="name">Property Item Admin</field>-->
-  <!--    <field name="category_id" ref="property_items_category" />-->
-  <!--    <field name="implied_ids"-->
-  <!--           eval="[(4, ref('real_estate.group_property_item_user')), (4, ref('base.group_system'))]" />-->
-  <!--  </record>-->
-
-  <!-- قواعد الوصول للمدير -->
-  <record id="rule_property_item_admin" model="ir.rule">
-    <field name="name">Property Item: Admin Access</field>
-    <field name="model_id" ref="real_estate.model_property_items" />
-    <field name="domain_force">[]</field> <!-- يسمح للوصول إلى كل السجلات -->
-    <field name="groups" eval="[(4, ref('real_estate.group_property_item_admin'))]" />
-  </record>
-
   <!--قواعد التسجيل (Record Rules)
   لمنع المستخدمين من رؤية السجلات التي لا تخصهم-->
   <record id="rule_property_item_user" model="ir.rule">
@@ -86,4 +75,12 @@
     <field name="groups" eval="[(4, ref('real_estate.group_property_item_user'))]" />
   </record>
 
+
+  <!-- قواعد الوصول للمدير -->
+  <record id="rule_property_item_admin" model="ir.rule">
+    <field name="name">Property Item: Admin Access</field>
+    <field name="model_id" ref="real_estate.model_property_items" />
+    <field name="domain_force">[]</field> <!-- يسمح للوصول إلى كل السجلات -->
+    <field name="groups" eval="[(4, ref('real_estate.group_property_item_admin'))]" />
+  </record>
 </odoo>

@@ -53,13 +53,16 @@ class PropertyItems(models.Model):
     country_id = fields.Many2one('res.country', string='Country', )
 
     # البيانات المالية
-    selling_price = fields.Float(tracking=True, )
+    selling_price = fields.Monetary(tracking=True, currency_field='currency_id', )
     # selling_price = fields.Float(tracking=True, required=True, groups='real_estate.group_property_item_admin')
     # تاريخ البيع المتوقع
     expected_selling_date = fields.Date(string="Expected Selling Date", )
-    rental_price = fields.Float(string='Rental Price', tracking=True, )  # سعر ألإيجار
+    rental_price = fields.Monetary(string='Rental Price', tracking=True, currency_field='currency_id')  # سعر ألإيجار
     # النموذج res.currency يأتي افتراضيًا مع  Odoo كجزء من الوحدة الأساسية base
     currency_id = fields.Many2one('res.currency', string='Currency')
+    # currency_id = fields.Many2one(
+    #         'res.currency', string="Currency",
+    #         default=lambda self: self.env.company.currency_id)
 
     #  تعيين حقل منطقي لتحديد إذا ما كان التاريخ قد مر أم لا
     is_past = fields.Boolean(string='Is Past', compute='_compute_is_past', store=True)
@@ -76,7 +79,8 @@ class PropertyItems(models.Model):
     state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('sold', 'Sold'), ('closed', 'Closed')], string='State', default='available', tracking=True)
 
     # معلومات إضافية
-    images = fields.Binary(string='Images')
+    images = fields.Image(string='Images')
+    # images = fields.Binary(string='Images')
     feature_ids = fields.Many2many('property.feature', 'property_feature_rel', 'property_id', 'feature_id', string='Features')
     neighborhood = fields.Char(string='Neighborhood')
 
@@ -264,6 +268,10 @@ class PropertyItems(models.Model):
             if vals.get('reference_number', _('new')) == _('new'):
                 vals['reference_number'] = self.env['ir.sequence'].next_by_code('prop_sequence') or _('new')
 
+            # تعيين لون عشوائي إذا لم يتم تحديده
+            if not vals.get('color'):
+                vals['color'] = random.randint(1, 10)  # اختيار رقم عشوائي بين 1 و 10 للألوان
+
         # بعد تحديث القيم، قم بإنشاء السجلات
         return super(PropertyItems, self).create(vals_list)
 
@@ -372,6 +380,7 @@ class PropertyItems(models.Model):
             }
 
     def get_price_statistics(self):
+        # self.ensure_one()  # دي لو عايز استخدمها علي سجل واحد
         all_properties = self.search([])
         total_price = sum(property.selling_price for property in all_properties)
         average_price = total_price / len(all_properties) if all_properties else 0
@@ -396,7 +405,8 @@ class PropertyItems(models.Model):
 
     def action_open_change_state_wizard(self):
         if len(self) > 1:
-            raise UserError("You can only perform this action on one record at a time.")
+            raise UserError(_("You can only perform this action on one record at a time."))
+
         self.ensure_one()  # التأكد من أن الدالة تُستدعى على سجل واحد فقط
 
         # تحقق من أن الحالة الحالية تسمح بتغييرها

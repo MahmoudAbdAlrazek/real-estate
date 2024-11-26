@@ -4,6 +4,7 @@ from odoo import fields, models, _, api
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    color = fields.Integer(string='Color', default=lambda self: random.randint(0, 11))
     property_ids = fields.One2many(
             'property.items',
             'partner_id',

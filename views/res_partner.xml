@@ -8,6 +8,7 @@
         <field name="property_ids" widget='many2many_tags' options="{'color_field': 'color'}" />
       </xpath>
 
+
       <xpath expr="//div[@name='button_box']" position="inside">
         <button name="action_view_properties"
                 type="object"

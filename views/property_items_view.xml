@@ -84,7 +84,8 @@
 
               <field name="partner_id"
                      string="Owner Partner"
-                     context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                     context="{'partner_id_search_mode': 'customer', 'show_address': 1, 'show_vat': True
+                            , 'show_email': True, 'show_phone': True, 'show_mobile': True}"
                      readonly="state_readonly == 'True' or context.get('partner_readonly', False) == True" />
               <field name="customer_email" />
               <!--                     context="{'default_is_partner_property': True}"-->
@@ -104,7 +105,7 @@
 
               <field name="country_id" placeholder="Country" readonly="state_readonly == 'True'" />
 
-              <field name="state_id" placeholder="State_Country"
+              <field name="state_id" placeholder="State Country"
                      readonly="state_readonly == 'True'" />
 
               <field name="city" placeholder="City" readonly="state_readonly == 'True'" />
@@ -146,7 +147,7 @@
             <!-- معلومات الموقع والخصائص -->
             <group string="Additional Info">
 
-              <field name="images" widget='image' class="oe_avatar"
+              <field name="images" widget="image" class="oe_avatar"
                      readonly="state_readonly == 'True'" />
 
               <field name="property_type" widget="selection" options="{'horizontal': True}"
@@ -191,6 +192,7 @@
                 <tree>
                   <field name="name" />
                   <field name="file_size" />
+                  <!--                  <field name="datas" context="{'max_file_size': 5242880, 'file_types': ['.jpg', '.pdf', '.png']}" />-->
                 </tree>
               </field>
             </page>
@@ -229,11 +231,12 @@
                   class="oe_highlight" />
         </header>
         <field name="name" />
-        <field name="selling_price" />
+        <field name="selling_price" widget="monetary" />
         <field name="expected_selling_date" />
+        <field name="currency_id" />
         <field name="property_type" />
         <field name="location" />
-        <field name="city" />
+        <field name="city" optional="hide" />
         <field name="country_id" />
         <field name="property_type" />
         <field name="expected_selling_date" />
@@ -263,10 +266,14 @@
         <filter string="Closed" name="closed_filter" domain="[('state', '=', 'closed')]" />
         <separator />
         <filter string="Price Below 100k" name="price_filter" domain="[('selling_price', '&lt;', 100000)]" />
+        <separator />
+        <!--        يمكنك استخدام مفتاح context داخل عرض البحث لتوفير خيارات تصفية للسجلات المؤرشفة وغير المؤرشفة.-->
+        <filter string="Archived" name="archived" context="{'active_test': False}" />
+        <filter string="Unarchived" name="unarchived" context="{'active_test': True}" />
 
 
         <!-- التصفية على الحقول العامة -->
-        <group expand="1" string="Group By">
+        <group expand="0" string="Group By">
           <filter string="Location" name="group_by_location" context="{'group_by': 'location'}" />
           <filter string="State" name="group_by_state" context="{'group_by': 'state'}" />
           <filter string="Property Type" name="group_by_property_type" context="{'group_by': 'property_type'}" />
@@ -423,6 +430,16 @@
     <field name="res_model">property.items</field>
     <field name="view_mode">tree,form,search,kanban,graph,pivot</field>
     <field name="context">{'search_default_state':'available'}</field>
+    <!--    <field name="context">{'search_default_state':'available','group_by':'property_type'}</field>-->
+    <!--    <field name="context">{'search_default_group_by_property_type':1}</field>-->
+    <!--    <field name="context">{'search_default_available_filter':1}</field>-->
+
+    <!--    هذا هو السلوك الافتراضي، حيث يتم عرض السجلات غير المؤرشفة فقط.-->
+    <!--    <field name="context">{'active_test': True}</field>-->
+    <!--    إذا أردت عرض السجلات المؤرشفة فقط، قم بتحديد active_test بـ False.-->
+    <!--    <field name="context">{'active_test': False}</field>-->
+    <!--    لعرض جميع السجلات، سواء كانت مؤرشفة أو غير مؤرشفة، يمكن ببساطة إزالة استخدام مفتاح active_test أو تعيينه إلى None.-->
+    <!--    <field name="context">{'active_test': None}</field>-->
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Create a new document

@@ -21,8 +21,9 @@ class PropertyDeal(models.Model):
     email = fields.Char(related='partner_id.email', string='Email', readonly=True)
 
     # الحقول المرتبطة بسعر وايجارالعقار
-    sale_price = fields.Float(related='property_id.selling_price', string='Sale Price', readonly=True)
-    rent_price = fields.Float(related='property_id.rental_price', string='Rent Price', readonly=True)
+    sale_price = fields.Monetary(related='property_id.selling_price', string='Sale Price', readonly=True, currency_field='currency_id')
+    rent_price = fields.Monetary(related='property_id.rental_price', string='Rent Price', readonly=True, currency_field='currency_id')
+    currency_id = fields.Many2one('res.currency', string='Currency')
 
     # الحقول المرتبطة بالموقع الجغرافي للعقار
     city = fields.Char(related='property_id.city', string='City', readonly=True)
