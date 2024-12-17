@@ -81,11 +81,15 @@
             <group string="General Info">
               <field name="state_readonly" invisible="1" />
               <field name="name" widget="char" readonly="state_readonly == 'True'" />
+              <!--              <field name="related_record" />-->
+              <field name="name" password="True" placeholder="Enter your password" class="password-field" />
+
 
               <field name="partner_id"
                      string="Owner Partner"
                      context="{'partner_id_search_mode': 'customer', 'show_address': 1, 'show_vat': True
                             , 'show_email': True, 'show_phone': True, 'show_mobile': True}"
+                     options="{'create': True}"
                      readonly="state_readonly == 'True' or context.get('partner_readonly', False) == True" />
               <field name="customer_email" />
               <!--                     context="{'default_is_partner_property': True}"-->

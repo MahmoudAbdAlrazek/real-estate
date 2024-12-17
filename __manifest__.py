@@ -19,7 +19,7 @@
         'version'    : '0.1',
 
         # any module necessary for this one to work correctly
-        'depends'    : ['base', 'mail', 'contacts', 'account'],
+        'depends'    : ['base', 'mail', 'contacts', 'account', 'portal', 'website'],
         # 'depends': ['base', 'contacts', 'mail', 'sale_management',
         #             'account_accountant', 'website'
         #             ],
@@ -51,6 +51,7 @@
                 'data/property_feature_data.xml',  # إضافة هذا الملف لبيانات مزايا العقار
                 'views/res_partner.xml',
                 'views/property_deal_views.xml',
+                'views/portal_template_view.xml',
                 # 'views/res_setting.xml',
 
                 # إذا كنت تستخدم Wizards في الموديل الخاص بك، أضفها بعد ملفات العرض
@@ -65,6 +66,8 @@
                 # أضف أي ملفات وراثة (مثل res_partner_view_inherit.xml) أو أي ملفات إضافية في النهاية.
 
                 'views/res_partner.xml',
+
+                'views/menu_website.xml',
         ],
 
         'assets'     : {

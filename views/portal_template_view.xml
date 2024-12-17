@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="portal_my_home_properties" inherit_id="portal.portal_my_home">
+      <!--        <p>This is a test element</p>-->
+      <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="inside">
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="config_card" t-value="True" />
+          <t t-set="url">/my/properties</t>
+          <t t-set="title">Properties</t>
+          <t t-set="text">Manage your properties</t>
+          <t t-set="icon">/web/static/src/img/placeholder.png</t>
+          <!-- استرجاع العدد الخاص بالعميل باستخدام request.env.user -->
+          <!--          <t t-set="count"-->
+          <!--             t-value="request.env['property.items'].search_count([('partner_id', '=', request.env.user.partner_id.id)]) or 0" />-->
+          <!--           دا لو عايز ارجع العدد كله-->
+          <t t-set="count" t-value="request.env['property.items'].search_count([])" />
+
+          <!-- تأكد من أن القيم يتم تمريرها دائماً -->
+
+        </t>
+      </xpath>
+    </template>
+
+    <template id="portal_breadcrumbs_properties" inherit_id="portal.portal_breadcrumbs">
+      <xpath expr="//ol[contains(@class, 'o_portal_submenu')]" position="inside">
+        <li t-if="page_name == 'my_properties_list'" class="breadcrumb-item">
+          <a href="/my" class="alert-link">
+            <i class="oi oi-arrow-left me-1" />
+            Home
+          </a>
+          <span class="ms-4">Properties</span>
+        </li>
+
+        <li t-if="page_name == 'my_properties_form'" class="breadcrumb-item">
+          <a href="/my/properties" class="alert-link"><i class="oi oi-arrow-left me-1" />Properties
+          </a>
+          /
+          <span t-out="property.name" />
+        </li>
+      </xpath>
+    </template>
+
+
+    <template id="portal_my_properties">
+      <t t-call="portal.portal_layout">
+        <t t-call="portal.portal_table">
+          <div class="container">
+
+            <!-- شريط البحث -->
+            <div class="property-search-wrapper bg-light p-4 rounded-lg shadow-sm">
+              <form action="/my/properties" method="get" class="search-form">
+                <div class="row align-items-center">
+                  <div class="col-12 col-md-8 mb-3 mb-md-0">
+                    <div class="position-relative">
+                      <input type="text"
+                             name="search"
+                             class="form-control form-control-lg search-input"
+                             placeholder="Search properties by name or state..."
+                             t-att-value="search" />
+                      <span class="search-icon">
+                        <i class="fas fa-search text-muted"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-3 mb-3 mb-md-0">
+                    <select name="search_in" class="form-control form-control-lg custom-select">
+                      <t t-foreach="searchbar_inputs" t-as="option">
+                        <option t-att-value="option"
+                                t-att-selected="option == search_in">
+                          <t t-esc="searchbar_inputs[option]['label']" />
+                        </option>
+                      </t>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-1">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block search-button">
+                      <i class="fas fa-search d-md-none"></i>
+                      <span class="d-none d-md-inline">Search</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- شريط التجميع (Groupby) -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <span>Group by:</span>
+                <div class="d-none d-sm-flex">
+                  <div class="btn-group d-flex flex-wrap" style="gap: 5px;">
+                    <t t-foreach="searchbar_groupbys.items()" t-as="group_option">
+                      <a t-att-href="'/my/properties?groupby=' + group_option[0]"
+                         t-att-class="'btn btn-outline-secondary ' + ('active' if groupby == group_option[0] else '')"
+                         class="btn px-3 py-2">
+                        <t t-esc="group_option[1]['label']" />
+                      </a>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- للأجهزة الصغيرة -->
+                <div class="dropdown d-block d-sm-none">
+                  <button class="btn btn-outline-secondary dropdown-toggle px-3 py-2" type="button"
+                          id="dropdownGroupbyButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <t t-esc="searchbar_groupbys[groupby]['label']" />
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownGroupbyButton">
+                    <t t-foreach="searchbar_groupbys.items()" t-as="group_option">
+                      <li>
+                        <a t-att-href="'/my/properties?groupby=' + group_option[0]"
+                           t-att-class="'dropdown-item ' + ('active' if groupby == group_option[0] else '')">
+                          <t t-esc="group_option[1]['label']" />
+                        </a>
+                      </li>
+                    </t>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- شريط البحث والفرز -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <span>Sort by:</span>
+
+                <!-- للأجهزة الكبيرة -->
+                <div class="d-none d-sm-flex">
+                  <div class="btn-group d-flex flex-wrap" style="gap: 5px;">
+                    <t t-foreach="searchbar_sortings.items()" t-as="sort_option">
+                      <a t-att-href="'/my/properties?sortby=' + sort_option[0]"
+                         t-att-class="'btn btn-outline-primary ' + ('active' if sortby == sort_option[0] else '')"
+                         class="btn px-3 py-2">
+                        <t t-esc="sort_option[1]['label']" />
+                      </a>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- للأجهزة الصغيرة -->
+                <div class="dropdown d-block d-sm-none">
+                  <button class="btn btn-outline-primary dropdown-toggle px-3 py-2" type="button"
+                          id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <t t-esc="searchbar_sortings[sortby]['label']" />
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <t t-foreach="searchbar_sortings.items()" t-as="sort_option">
+                      <li>
+                        <a t-att-href="'/my/properties?sortby=' + sort_option[0]"
+                           t-att-class="'dropdown-item ' + ('active' if sortby == sort_option[0] else '')">
+                          <t t-esc="sort_option[1]['label']" />
+                        </a>
+                      </li>
+                    </t>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+            
+            <h1>My Properties</h1>
+            <p>List of properties will go here.</p>
+            <!-- إضافة جدول لتنسيق البيانات -->
+            <!-- عرض العقارات المجمعة فقط إذا كان groupby مختلفًا عن none -->
+            <t t-if="groupby != 'none' and grouped_properties">
+              <t t-foreach="grouped_properties.items()" t-as="group">
+                <t t-if="group[1]">
+                  <div class="card mb-4">
+                    <div class="card-header bg-light">
+                      <h4 class="mb-0">
+                        <t t-esc="group[0] or 'Uncategorized'" />
+                      </h4>
+                    </div>
+                    <div class="card-body p-0">
+                      <table class="table table-striped table-bordered mb-0">
+                        <thead class="table-group-divider text-center">
+                          <tr>
+                            <th>ID</th>
+                            <th>Property Name</th>
+                            <th>Image</th>
+                            <th>Partner</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider text-center">
+                          <t t-foreach="group[1]" t-as="property">
+                            <tr>
+                              <td>
+                                <t t-esc="property.id" />
+                              </td>
+                              <td>
+                                <a t-att-href="'/my/properties/' + str(property.id)">
+                                  <t t-esc="property.name" />
+                                </a>
+                              </td>
+                              <td>
+                                <t t-if="property.images">
+                                  <img t-attf-src="data:image/png;base64,{{property.images.decode('utf-8')}}"
+                                       alt="avatar"
+                                       class="rounded-circle img-fluid" style="width: 50px; height: 50px;" />
+                                </t>
+                                <t t-else="">
+                                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                       alt="avatar"
+                                       class="rounded-circle img-fluid" style="width: 50px; height: 50px; " />
+                                </t>
+                              </td>
+                              <td>
+                                <t t-esc="property.partner_id.name" />
+                              </td>
+                              <td>
+                                <t t-esc="property.selling_price" />
+                              </td>
+                              <td>
+                                <t t-esc="property.state" />
+                              </td>
+                            </tr>
+                          </t>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </t>
+              </t>
+            </t>
+
+
+            <!-- عرض الجدول العادي إذا كان groupby هو none أو لم يكن هناك تجميع -->
+            <t t-if="groupby == 'none' or not grouped_properties">
+              <table class="table table-striped table-bordered">
+                <thead class="table-group-divider text-center">
+                  <tr>
+                    <th>ID</th>
+                    <th>Property Name</th>
+                    <th>Image</th>
+                    <th>Partner</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider text-center">
+                  <t t-foreach="properties" t-as="property">
+                    <tr>
+                      <tr>
+                        <td>
+                          <t t-esc="property.id" />
+                        </td>
+                        <td>
+                          <a t-att-href="'/my/properties/' + str(property.id)">
+                            <t t-esc="property.name" />
+                          </a>
+                        </td>
+                        <td>
+                          <t t-if="property.images">
+                            <img t-attf-src="data:image/png;base64,{{property.images.decode('utf-8')}}"
+                                 alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 50px; height: 50px;" />
+                          </t>
+                          <t t-else="">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                 alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 50px; height: 50px; " />
+                          </t>
+                        </td>
+                        <td>
+                          <t t-esc="property.partner_id.name" />
+                        </td>
+                        <td>
+                          <t t-esc="property.selling_price" />
+                        </td>
+                        <td>
+                          <t t-esc="property.state" />
+                        </td>
+                      </tr>
+
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+            </t>
+
+
+          </div>
+        </t>
+      </t>
+      <style>
+        .property-search-wrapper {
+        max-width: 1200px;
+        margin: 0 auto 30px;
+        background-color: #f8f9fa !important;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        }
+
+        .property-search-wrapper:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-5px);
+        }
+
+        .search-input {
+        padding-left: 40px !important;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+        }
+
+        .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        }
+
+        .custom-select {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        }
+
+        .search-button {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+        transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+        .property-search-wrapper {
+        padding: 20px !important;
+        }
+
+        .search-form .row > div {
+        margin-bottom: 15px;
+        }
+
+        .search-button {
+        width: 100%;
+        }
+        }
+      </style>
+
+    </template>
+
+    <template id="portal_my_properties_details_sidebar" inherit_id="portal.portal_sidebar">
+      <xpath expr="//div[contains(@class, 'o_portal_sidebar')]" position="inside">
+        <t t-if="page_name == 'my_properties_form'">
+          <div class="container py-5">
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="card mb-4">
+                  <div class="card-body text-center">
+                    <t t-if="property.images">
+                      <img t-attf-src="data:image/png;base64,{{property.images.decode('utf-8')}}" alt="avatar"
+                           class="rounded-circle img-fluid" style="width: 150px;" />
+                    </t>
+                    <t t-else="">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                           class="rounded-circle img-fluid" style="width: 150px;" />
+                    </t>
+                    <!--                    عمل روات لتنزيل تقرير-->
+                    <!--   هنا property بتدل علي فور لوب لما لفيت عليها وال id عشان يوصل للريكود كله عن طريق ال id-->
+                    <a t-att-href="'/my/properties/print/%s' % property.id">
+                      <i class="fa fa-download">Download</i>
+                    </a>
+
+                    <h5 class="my-3">
+                      <t t-esc="property.name" />
+                    </h5>
+                    <p class="text-muted mb-1">
+                      <t t-esc="property.city" />
+                    </p>
+                    <p class="text-muted mb-4">
+                      <t t-esc="property.state_id.name" />
+                    </p>
+                    <p class="text-muted mb-4">
+                      <t t-esc="property.property_type" />
+                    </p>
+                    <div class="d-flex justify-content-center mb-2">
+                      <!--              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary">Follow</button>-->
+                      <!--              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1">Message</button>-->
+                    </div>
+                  </div>
+                </div>
+                <!--                <div class="card mb-4 mb-lg-0">-->
+                <!--                  <div class="card-body p-0">-->
+                <!--                    <ul class="list-group list-group-flush rounded-3">-->
+                <!--                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">-->
+                <!--                        <i class="fas fa-globe fa-lg text-warning"></i>-->
+                <!--                        <p class="mb-0">https://mdbootstrap.com</p>-->
+                <!--                      </li>-->
+                <!--                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">-->
+                <!--                        <i class="fab fa-github fa-lg text-body"></i>-->
+                <!--                        <p class="mb-0">mdbootstrap</p>-->
+                <!--                      </li>-->
+                <!--                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">-->
+                <!--                        <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>-->
+                <!--                        <p class="mb-0">@mdbootstrap</p>-->
+                <!--                      </li>-->
+                <!--                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">-->
+                <!--                        <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>-->
+                <!--                        <p class="mb-0">mdbootstrap</p>-->
+                <!--                      </li>-->
+                <!--                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">-->
+                <!--                        <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>-->
+                <!--                        <p class="mb-0">mdbootstrap</p>-->
+                <!--                      </li>-->
+                <!--                    </ul>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+              </div>
+              <div class="col-lg-8">
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Partner Name</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <t t-esc="property.partner_id.name" />
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Email</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <t t-esc="property.partner_id.email" />
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Phone</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <t t-esc="property.partner_id.phone" />
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Mobile</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <t t-esc="property.partner_id.mobile" />
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Address</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <t t-esc="property.partner_id.city" />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container py-5">
+            <h1>Chatter Features</h1>
+            <t t-call="portal.message_thread">
+              <t t-set="object" t-value="property" />
+            </t>
+          </div>
+        </t>
+      </xpath>
+    </template>
+
+  </data>
+</odoo>

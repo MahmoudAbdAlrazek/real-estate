@@ -1,4 +1,5 @@
 from odoo import fields, models, _, api
+import random
 
 
 class ResPartner(models.Model):

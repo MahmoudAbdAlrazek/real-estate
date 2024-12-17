@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- إنشاء menu للموقع -->
+  <record id="menu_property_items" model="website.menu">
+    <field name="name">Property Item</field>
+    <!--    <field name="website_id" ref="website.website_root" />-->
+    <field name="parent_id" ref="website.main_menu" />
+    <!--    <field name="parent_id" ref="website.menu_website_configuration" />-->
+    <field name="url">/property</field>  <!-- رابط النموذج -->
+    <field name="sequence">50</field> <!-- ترتيب العنصر في القائمة -->
+  </record>
+
+  <template id="property_items_form_template" name="Property Items Form">
+    <t t-call="website.layout">
+      <div class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-sm rounded">
+              <div class="card-body">
+                <h2 class="text-center mb-4 text-primary">Property Form</h2>
+
+                <t t-if="message">
+                  <div class="alert alert-success">
+                    <t t-esc="message" />
+                  </div>
+                </t>
+
+                <form action="/property/submit" method="post">
+                  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                  <!--                  <t t-esc="request.csrf_token()" />-->
+                  <!-- Property Name -->
+                  <div class="form-group">
+                    <label for="name" class="font-weight-bold">Property Name</label>
+                    <input type="text" class="form-control" name="name" id="name" required="true" />
+                  </div>
+
+                  <!-- Customer Name -->
+                  <div class="form-group">
+                    <label for="partner_name" class="font-weight-bold">Customer Name</label>
+                    <input type="text" class="form-control" name="partner_name" id="partner_name" required="true" />
+                  </div>
+
+                  <!-- Email -->
+                  <div class="form-group">
+                    <label for="customer_email" class="font-weight-bold">Email</label>
+                    <input type="email" class="form-control" name="customer_email" id="customer_email" />
+                  </div>
+
+                  <!-- City -->
+                  <div class="form-group">
+                    <label for="city" class="font-weight-bold">City</label>
+                    <input type="text" class="form-control" name="city" id="city" />
+                  </div>
+
+                  <!-- State -->
+                  <div class="form-group">
+                    <label for="state_id" class="font-weight-bold">State</label>
+                    <select class="form-control" name="state_id" id="state_id">
+                      <t t-foreach="countries" t-as="country">
+                        <option t-att-value="country.id">
+                          <t t-esc="country.name" />
+                        </option>
+                      </t>
+                    </select>
+                  </div>
+
+                  <!-- Selling Price -->
+                  <div class="form-group">
+                    <label for="selling_price" class="font-weight-bold">Selling Price</label>
+                    <input type="number" class="form-control" name="selling_price" id="selling_price" />
+                  </div>
+
+                  <!-- Currency -->
+                  <div class="form-group">
+                    <label for="currency_id" class="font-weight-bold">Currency</label>
+                    <select class="form-control" name="currency_id" id="currency_id">
+                      <t t-foreach="currencies" t-as="currency">
+                        <option t-att-value="currency.id">
+                          <t t-esc="currency.name" />
+                        </option>
+                      </t>
+                    </select>
+                  </div>
+
+                  <!-- Property Type -->
+                  <div class="form-group">
+                    <label for="property_type" class="font-weight-bold">Property Type</label>
+                    <select class="form-control" name="property_type" id="property_type">
+                      <option value="residential">Residential</option>
+                      <option value="commercial">Commercial</option>
+                      <option value="industrial">Industrial</option>
+                      <option value="land">Land</option>
+                      <option value="office">Office</option>
+                    </select>
+                  </div>
+
+                  <!-- Number of Rooms -->
+                  <div class="form-group">
+                    <label for="number_of_rooms" class="font-weight-bold">Number of Rooms</label>
+                    <input type="number" class="form-control" name="number_of_rooms" id="number_of_rooms" />
+                  </div>
+
+                  <!-- Number of Bathrooms -->
+                  <div class="form-group">
+                    <label for="number_of_bathrooms" class="font-weight-bold">Number of Bathrooms</label>
+                    <input type="number" class="form-control" name="number_of_bathrooms" id="number_of_bathrooms" />
+                  </div>
+
+
+                  <!-- Submit Button -->
+                  <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success w-100 py-2">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!--  <template id="property_items_form_template" name="Property Items Form">-->
+  <!--    <t t-call="website.layout">-->
+  <!--      <div id="wrap">-->
+  <!--        <div class="oe_structure">-->
+  <!--          <div class="container mt-5">-->
+  <!--            <h2>Property Form</h2>-->
+  <!--            <t t-if="message">-->
+  <!--              <div class="alert alert-warning">-->
+  <!--                <t t-esc="message" />-->
+  <!--              </div>-->
+  <!--            </t>-->
+
+  <!--            <form action="/property/submit" method="post">-->
+  <!--              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />-->
+  <!--              <t t-esc="request.csrf_token()" />-->
+  <!--              <input type="hidden" />-->
+  <!--              &lt;!&ndash; Row for form groups &ndash;&gt;-->
+  <!--              <div class="row">-->
+  <!--                &lt;!&ndash; Property Name &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="name">Property Name</label>-->
+  <!--                  <input type="text" class="form-control" name="name" id="name" required="true" />-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Customer Name &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="partner_name">Customer Name</label>-->
+  <!--                  <input type="text" class="form-control" name="partner_name" id="partner_name" required="true" />-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Email &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="customer_email">Email</label>-->
+  <!--                  <input type="email" class="form-control" name="customer_email" id="customer_email" />-->
+  <!--                </div>-->
+  <!--              </div>-->
+
+  <!--              <div class="row">-->
+  <!--                &lt;!&ndash; City &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="city">City</label>-->
+  <!--                  <input type="text" class="form-control" name="city" id="city" />-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; State &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="state_id">State</label>-->
+  <!--                  <select class="form-control" name="state_id" id="state_id">-->
+  <!--                    <t t-foreach="countries" t-as="country">-->
+  <!--                      <option t-att-value="country.id">-->
+  <!--                        <t t-esc="country.name" />-->
+  <!--                      </option>-->
+  <!--                    </t>-->
+  <!--                  </select>-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Selling Price &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="selling_price">Selling Price</label>-->
+  <!--                  <input type="number" class="form-control" name="selling_price" id="selling_price" />-->
+  <!--                </div>-->
+  <!--              </div>-->
+
+  <!--              <div class="row">-->
+  <!--                &lt;!&ndash; Currency &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="currency_id">Currency</label>-->
+  <!--                  <select class="form-control" name="currency_id" id="currency_id">-->
+  <!--                    <t t-foreach="currencies" t-as="currency">-->
+  <!--                      <option t-att-value="currency.id">-->
+  <!--                        <t t-esc="currency.name" />-->
+  <!--                      </option>-->
+  <!--                    </t>-->
+  <!--                  </select>-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Property Type &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="property_type">Property Type</label>-->
+  <!--                  <select class="form-control" name="property_type" id="property_type">-->
+  <!--                    <option value="residential">Residential</option>-->
+  <!--                    <option value="commercial">Commercial</option>-->
+  <!--                    <option value="industrial">Industrial</option>-->
+  <!--                    <option value="land">Land</option>-->
+  <!--                    <option value="office">Office</option>-->
+  <!--                  </select>-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Number of Rooms &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="number_of_rooms">Number of Rooms</label>-->
+  <!--                  <input type="number" class="form-control" name="number_of_rooms" id="number_of_rooms" />-->
+  <!--                </div>-->
+  <!--              </div>-->
+
+  <!--              <div class="row">-->
+  <!--                &lt;!&ndash; Number of Bathrooms &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="number_of_bathrooms">Number of Bathrooms</label>-->
+  <!--                  <input type="number" class="form-control" name="number_of_bathrooms" id="number_of_bathrooms" />-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Images &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="images">Images</label>-->
+  <!--                  <input type="file" class="form-control" name="images" id="images" />-->
+  <!--                </div>-->
+
+  <!--                &lt;!&ndash; Features &ndash;&gt;-->
+  <!--                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-4">-->
+  <!--                  <label for="feature_ids">Features</label>-->
+  <!--                  <select class="form-control" name="feature_ids" id="feature_ids" multiple="multiple">-->
+  <!--                    <t t-foreach="features" t-as="feature">-->
+  <!--                      <option t-att-value="feature.id">-->
+  <!--                        <t t-esc="feature.name" />-->
+  <!--                      </option>-->
+  <!--                    </t>-->
+  <!--                  </select>-->
+  <!--                </div>-->
+  <!--              </div>-->
+
+  <!--              <button type="submit" class="btn btn-primary mt-3 w-100">Submit</button>-->
+  <!--            </form>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </t>-->
+  <!--  </template>-->
+</odoo>
+
+

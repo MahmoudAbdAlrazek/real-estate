@@ -27,7 +27,9 @@ class PropertyItems(models.Model):
     partner_id = fields.Many2one(
             'res.partner',
             string='Partner Owner',
-            tracking=True, )
+            tracking=True,
+            # context={'create': True}  # هذا يمكن أن يسمح بإنشاء سجل جديد
+    )
 
     customer_email = fields.Char(related='partner_id.email', string='Email')
 
@@ -35,6 +37,11 @@ class PropertyItems(models.Model):
 
     # البيانات الأساسية
     name = fields.Char(string='Property Name', tracking=True, )
+    # related_record = fields.Reference(
+    #     selection=[('res.partner', 'Partner'), ('product.template', 'Product'), ],
+    #     string="Related Record",
+    #     )
+
     description = fields.Text(string='Description')
     active = fields.Boolean(string='Archive', default=True)
 
@@ -79,7 +86,7 @@ class PropertyItems(models.Model):
     state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('sold', 'Sold'), ('closed', 'Closed')], string='State', default='available', tracking=True)
 
     # معلومات إضافية
-    images = fields.Image(string='Images')
+    images = fields.Binary(string='Images')
     # images = fields.Binary(string='Images')
     feature_ids = fields.Many2many('property.feature', 'property_feature_rel', 'property_id', 'feature_id', string='Features')
     neighborhood = fields.Char(string='Neighborhood')
@@ -504,3 +511,9 @@ class PropertyItems(models.Model):
     #             template_id.send_mail(record.id, force_send=True)
     #         else:
     #             raise UserError("لم يتم العثور على قالب البريد الإلكتروني.")
+
+    # report call in portal
+    # لازم انادي داله دي عشان هي اللي هتطبع اسم تقرير
+    def _get_report_base_filename(self):
+        return self.name
+        # return "Property Items Report"
